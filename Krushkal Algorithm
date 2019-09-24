@@ -1,0 +1,61 @@
+import java.util.Scanner;
+import java.util.*;
+class Edge implements Comparable<Edge>{
+    int source;
+    int destination;
+    int weight;
+    public int compareTo(Edge o){
+        return this.weight-o.weight;
+    }
+}
+public class Solution{
+    static int findParent(int V,int parent[])
+    {
+        if(parent[V]==V){// if index of array of array is equal of parent which is there 
+            return V;
+        }
+        return findParent(parent[V],parent);
+    }
+	static void kruskal(Edge input[],int V){
+        Arrays.sort(input);
+        Edge output[]=new Edge[V-1];
+        int count=0;
+        int i=0;// current edge on which we are working right now.
+        int parent[]=new int[V];
+        for(int i1=0;i1<V;i1++){
+            parent[i1]=i1;// initally all parent of itself first
+        }
+        while(count!=V-1){
+            Edge currentEdge=input[i];
+            int sourcePar=findParent(currentEdge.source,parent);
+            int dest=findParent(currentEdge.destination,parent);
+            if(sourcePar!=dest){
+                output[count]=currentEdge;
+                count++;
+                parent[sourcePar]=dest;// make one componet parent
+            }
+            i++;
+        }
+        for(int j=0;j<V-1;j++){
+            if(output[j].source<output[j].destination){
+            System.out.println(output[j].source+" "+output[j].destination+" "+output[j].weight);
+        }       
+        else{
+            System.out.println(output[j].destination+" "+output[j].source+" "+output[j].weight);
+        }    
+        }
+    }
+    public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int V = s.nextInt();
+		int E = s.nextInt();
+        Edge input[]=new Edge[E];
+        for(int i=0;i<E;i++){
+            input[i]=new Edge();// creating a new object
+            input[i].source=s.nextInt();
+            input[i].destination=s.nextInt();
+            input[i].weight=s.nextInt();
+        }
+        kruskal(input,V);// V for vertices
+    }
+}
